@@ -3,7 +3,7 @@
 <h2>Description</h2>
 (Documentation in progress) 
 
-In this project, I installed and experimented with Wazuh on my main Computer. Wazuh is a free and open source security platform that unifies XDR and SIEM capabilities. It protects workloads across on-premises, virtualized, containerized, and cloud-based environments. The goal of this project is to gain hands-on experience with risk assessment and monitor vulnerabilities. Before getting this up and running, there are a few things I'll need!
+In this project, I installed and experimented with Wazuh on a home computer. Wazuh is a free and open source security platform that unifies XDR and SIEM capabilities. It protects workloads across on-premises, virtualized, containerized, and cloud-based environments. The goal of this project is to gain hands-on experience with risk assessment and monitor vulnerabilities. Before getting this up and running, there are a few things I'll need!
 
 <br />
 
