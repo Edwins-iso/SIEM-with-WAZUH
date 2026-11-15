@@ -27,89 +27,120 @@ In this project, I installed and experimented with Wazuh on my main Computer. Wa
 
 <p align="center">
 Install and Launch Virtual Box: <br/>
-<img src="https://imgur.com/eXOCy4f.png" height="80%" width="80%" alt="Virtualbox Installer"/>
+<img src="https://imgur.com/eXOCy4f.png" height="50%" width="50%" alt="Virtualbox Installer"/>
 <br />
 <br />
 Create a new Ubuntu Server Virtual Machine and configure settings:  <br/>
-<img src="https://imgur.com/eXOCy4f.png" height="40%" width="40%" alt="VM Creation Prompt"/>
-<img src="https://imgur.com/t1zJpNT.png" height="80%" width="80%" alt="VM Creation Prompt"/>
+<img src="https://imgur.com/xpfy3z2.png" height="60%" width="60%" alt="VM Creation Prompt"/>
+<img src="https://imgur.com/t1zJpNT.png" height="60%" width="60%" alt="VM Creation Prompt"/>
 
-- Important Settings: 4 Cores, 50GB Storage, 4GB Ram, 1 Bridged Adapter,
+- Important Settings: 4 Cores, 50GB Storage, 4GB Ram, 1 Bridged Adapter
+<br />
+<br />
+<p align="center">
+Start the machine, Follow Ubunter Server Installation Prompts, Sign In: <br/>
+<img src="https://imgur.com/A8kVgcK.png" height="50%" width="50%" alt="Ubuntu Server Install"/>
+
+- Once signed in, be sure to run the update commands!
+- sudo apt update
+- sudo apt upgrade
+- Installation of Wazuh can officially begin!
+<br />
+<br />
+<p align="center">
+Add the Wazuh GPG Key:<br/>
+<img src="https://imgur.com/HKhl6zj.png" height="90%" width="90%" alt="Internal Network IPV4 Properties Config"/>
   
+- Via a terminal window [ curl -s https://packages.wazuh.com/key/GPG-KEY-WAZUH | sudo gpg --dearmor -o /usr/share/keyrings/wazuh-archive-keyring.gpg ] 
+- This adds the GPG key to verify Wazuh packages.
 <br />
 <br />
 <p align="center">
-Run the VM, Follow Windows Server Installation Prompts, Sign In: <br/>
-<img src="https://imgur.com/qNLDvEh.png" height="80%" width="80%" alt="Windows Server Desktop on First Sign In"/>
-
-- This is the screen that you will be met with once installation and sign in are complete. Configuration of the server can officially begin!
-<br />
-<br />
-<p align="center">
-Configure the IPV4 Properties for the internal network adapter:<br/>
-<img src="https://imgur.com/Zx0tE33.png" height="40%" width="40%" alt="Internal Network IPV4 Properties Config"/>
-<br />
-<br />
-<p align="center">
-Within the Server Manager, Install Active Directory Domain Services Role and Promote this server to Domain Controller:  <br/>
-<img src="https://imgur.com/h3kjnpv.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
-<img src="https://imgur.com/ixxiL6c.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
+Download and Execute Wazuh Installation Script:<br/>
+<img src="https://imgur.com/gCKoKxs.png" height="90%" width="90%" alt="Internal Network IPV4 Properties Config"/>
   
-- In this step you will
-- Add a new forest and configure a domain name
-- Set Directory Services Restore Mode Password
+- Via a terminal window [ curl -sO https://packages.wazuh.com/4.12/wazuh-install.sh && sudo bash./wazuh-install.sh -a -i ]
+- -a: Installs all components (manager, indexer.)
+- -i: Runs in interactive mode
+- The script installs all required services and configures them automatically.
+- Once installed, the login details will be shown in the terminal. Be sure to save this login for later!
+- Now we can access the Dashboard!
 <br />
 <br />
 <p align="center">
-Create an Admin Account in the "Active Directory Users and Computers" Menu:<br/>
-<img src="https://imgur.com/ZjfRvdB.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
-<img src="https://imgur.com/aVh43uu.png" height="40%" width="40%" alt="Disk Sanitization Steps"/>
+Check your Ubuntu VM’s IP address with ifconfig:<br/>
+<img src="https://imgur.com/T2Zd9xn.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
 <br />
 <br />
 <p align="center">
-Within the Server Manager, Install Remote Access Role and Configure it to the Internet Interface:<br/>
-<img src="https://imgur.com/u8K1zIZ.png" height="50%" width="50%" alt="Disk Sanitization Steps"/>
-<img src="https://imgur.com/mCHs3go.png" height="40%" width="40%" alt="Disk Sanitization Steps"/>
+On your Ubuntu server, open a browser and go to https://< ubuntu-vm-ip >:<br/>
+<img src="https://imgur.com/46MwpMj.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
+<p align="center">
+Now we can see the Dashboard!
+<img src="https://imgur.com/TpvO02R.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
 <br />
 <br />
 <p align="center">
-Within the Server Manager, Install DHCP Role and Configure IPv4 Settings:<br/>
-<img src="https://imgur.com/koaGZXG.png" height="50%" width="50%" alt="Disk Sanitization Steps"/>
-<img src="https://imgur.com/qDucjfG.png" height="50%" width="50%" alt="Disk Sanitization Steps"/>
+Download and install the latest Wazuh agent on Host Machine:<br/>
+<img src="https://imgur.com/5RXpLED.png" height="50%" width="50%" alt="Disk Sanitization Steps"/>
 <br />
 <br />
 <p align="center">
-Once these roles have all been properly configured. Your server manager should look like this:<br/>
-<img src="https://imgur.com/OpkSLL2.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
+On the Ubuntu Server, Generate Agent Key on Ubuntu Manager:<br/>
+<img src="https://imgur.com/0v7ocN7.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
+  
+- sudo /var/ossec/bin/manage_agents
+- Select A to add an agent.
+- Assign a name (e.g., WindowsHost).
+- Leave IP address blank unless static assignment is needed.
+- After creation, select E to extract the key.
+- Copy the key output.
 <br />
 <br />
 <p align="center">
-Next, We will set up a client PC, running Windows 11 Pro, and connect to the domain:<br/>
-<p align="center">
-<img src="https://imgur.com/rAi0shs.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
+On the Windows Host:<br/>
+<img src="https://imgur.com/kFa7wkv.png" height="50%" width="50%" alt="Disk Sanitization Steps"/>
 
-  - Please note that the network port will be set to "Internal Network"
-  - When prompted during setup, select "for business" and proceed using domain to avoid creating a windows account. Process may vary depending on version.
-  - Once set-up is complete, you should be met with the standard windows desktop. Now we need to confirm the Client PC has a connection with the domain controller. We can use multiple methods to confirm this
+- Open Wazuh Agent Manager GUI from the Start Menu.
+- Paste the copied key into the appropriate field.
+- Save and apply the key.
+- Add the manager's IP address (IP address of your Ubuntu manager).
+- Restart the agent service.
 <br />
 <br />
 <p align="center">
-Check for the Clients IP Address on the Domain Controllers DHCP and Active Directory Menus...:<br/>
+We can then go to the WAZUH dashboard and see the agent on-boarded:<br/>
+<img src="https://imgur.com/8MZn4xT.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
+<br />
+<br />
+<h2>File Integrity Monitoring:</h2>
 <p align="center">
-<img src="https://imgur.com/7ATSJnn.png" height="60%" width="50%" alt="Disk Sanitization Steps"/>
-<img src="https://imgur.com/5iub2LV.png" height="60%" width="50%" alt="Disk Sanitization Steps"/>
+Wazuh supports real-time monitoring of file and folder changes using Syscheck.:<br/>
 <br />
 <br />
 <p align="center">
-...or Sign In to the Client VM using a user account created on the DC. Then Ping the domain in the Command line:<br/>
+On the host machine, Open the following configuration file:<br/>
 <p align="center">
-<img src="https://imgur.com/khM7511.png" height="60%" width="50%" alt="Disk Sanitization Steps"/>
-<img src="https://imgur.com/M8F4VGH.png" height="60%" width="50%" alt="Disk Sanitization Steps"/>
-<img src="https://imgur.com/iwwKKO3.png" height="60%" width="50%" alt="Disk Sanitization Steps"/>
+<img src="https://imgur.com/oUafrxL.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
+  
+- Open the following configuration file as admin: C:\Program Files (x86)\ossec-agent\ossec.conf
+- Add the following entry inside the Directory block: <directories realtime="yes">C:\Users\abc\Test</directories>
+- Make sure to create the test folder first, then copy the path to the directory entry
+- This monitors the specified folder in real-time.
+- Save changes and restart the agent
+<br />
+<br />
+<p align="center">
+Verify the Integrity monitoring:<br/>
+<p align="center">
+<img src="https://imgur.com/j9zvrcf.png" height="100%" width="100%" alt="Disk Sanitization Steps"/>
+<img src="https://imgur.com/DXoL8Sp.png" height="70%" width="70%" alt="Disk Sanitization Steps"/>
 
-- I also pinged google.com to confirm the Internal Network was running properly
-- As we can see. The DC assigned the client PC an IP address using DHCP.
-- The next project within this Active Directory will be to setup and configure Group Policy Management!
+- Open the Wazuh Dashboard in your browser.
+- Navigate to Agents → ensure the Windows agent is listed and status is Active.
+- Go to the Integrity Monitoring section.
+- Perform actions (create/modify/delete files) in the monitored folder.
+- Confirm that alerts appear in the dashboard.
 <br />
 <br />
 
